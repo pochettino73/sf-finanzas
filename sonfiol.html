@@ -201,8 +201,8 @@ function renderB1(){
     </div>
     <div class="card">
       <div class="c-lbl">Gastos</div>
-      <div class="c-num md" style="color:var(--r)">${eur(gas)}</div>
-      <div class="c-sub" style="color:${dGas>=0?'var(--g)':'var(--r)'}">${eursign(dGas)} vs ${eur(Math.abs(pG))} presupuesto</div>
+      <div class="c-num md" style="color:var(--r)">${eur(Math.abs(gas))}</div>
+      <div class="c-sub" style="color:${dGas>=0?'var(--g)':'var(--r)'}">${dGas>=0?eur(dGas)+' menos que presupuesto':eur(Math.abs(dGas))+' sobre presupuesto'}</div>
     </div>`;
 
   const gasOver=Math.abs(gas)>Math.abs(pG)*1.05;

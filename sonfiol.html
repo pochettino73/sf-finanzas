@@ -196,7 +196,7 @@ function renderB1(){
     </div>
     <div class="card">
       <div class="c-lbl">Ingresos</div>
-      <div class="c-num md" style="color:var(--g)">${eur(ing)}</div>
+      <div class="c-num md" style="color:${dIng>=0?'var(--g)':'var(--r)'}">${eur(ing)}</div>
       <div class="c-sub" style="color:${dIng>=0?'var(--g)':'var(--r)'}">${eursign(dIng)} vs ${eur(pI)} esperados</div>
     </div>
     <div class="card">
@@ -271,7 +271,7 @@ function renderB3(){
   }
   let html='';
   top.forEach(r=>{
-    const ctxt=r.isIng?'vs lo esperado':'vs presupuesto';
+    const ctxt=r.isIng?'vs esperado':'vs presupuesto';
     const txt=`${r.p}: ${eursign(r.desv)} ${ctxt}`;
     html+=`<div class="vitem"><div class="vdot ${r.cls}"></div><div class="vtxt">${txt}</div></div>`;
   });

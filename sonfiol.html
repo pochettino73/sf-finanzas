@@ -334,19 +334,20 @@ function renderB4(){
 
 /* ===== B5: HISTÓRICO COMPLETO ===== */
 function renderB5(){
-  const curIdx=ALL_MESES.indexOf(curMes);
-  const n=ALL_MESES.length;
+  const MESES=[...ALL_MESES].reverse(); /* actual a la izquierda, pasado a la derecha */
+  const curIdx=MESES.indexOf(curMes);
+  const n=MESES.length;
 
   /* cabecera */
   let html='<thead><tr><th>Partida</th><th style="text-align:right">Pres.</th>';
-  ALL_MESES.forEach((m,i)=>{
+  MESES.forEach((m,i)=>{
     html+=`<th class="${i===curIdx?'ch':''}">${fmtMes(m)}</th>`;
   });
   html+='<th>Media</th></tr></thead><tbody>';
 
   /* acumuladores por mes */
-  const totIng={}; ALL_MESES.forEach(m=>totIng[m]=0);
-  const totGas={}; ALL_MESES.forEach(m=>totGas[m]=0);
+  const totIng={}; MESES.forEach(m=>totIng[m]=0);
+  const totGas={}; MESES.forEach(m=>totGas[m]=0);
 
   /* --- INGRESOS --- */
   html+=`<tr class="sh-r"><td colspan="${n+3}">INGRESOS</td></tr>`;
@@ -354,7 +355,7 @@ function renderB5(){
     const pres=PRESUPUESTO.ingresos[p]||0;
     let sum=0;
     html+=`<tr><td>${p}</td><td style="color:var(--m);text-align:right">${eur(pres)}</td>`;
-    ALL_MESES.forEach((m,i)=>{
+    MESES.forEach((m,i)=>{
       const v=val(p,m); sum+=v; totIng[m]+=v;
       const bg=i===curIdx?'rgba(59,130,246,.12)':'';
       const col=v===0?'var(--m)':'var(--t)';
@@ -363,12 +364,12 @@ function renderB5(){
     html+=`<td style="color:var(--m)">${eur(sum/n)}</td></tr>`;
   });
   html+=`<tr class="tot-r"><td>Total ingresos</td><td style="color:var(--m);text-align:right">${eur(presI())}</td>`;
-  ALL_MESES.forEach((m,i)=>{
+  MESES.forEach((m,i)=>{
     const v=totIng[m];
     const bg=i===curIdx?'rgba(59,130,246,.12)':'';
     html+=`<td style="background:${bg};color:var(--g)">${eur(v)}</td>`;
   });
-  const avgI=ALL_MESES.reduce((s,m)=>s+totIng[m],0)/n;
+  const avgI=MESES.reduce((s,m)=>s+totIng[m],0)/n;
   html+=`<td style="color:var(--m)">${eur(avgI)}</td></tr>`;
 
   /* --- GASTOS --- */
@@ -377,7 +378,7 @@ function renderB5(){
     const pres=PRESUPUESTO.gastos[p]||0;
     let sum=0;
     html+=`<tr><td>${p}</td><td style="color:var(--m);text-align:right">${eur(Math.abs(pres))}</td>`;
-    ALL_MESES.forEach((m,i)=>{
+    MESES.forEach((m,i)=>{
       const v=val(p,m); sum+=v; totGas[m]+=v;
       const bg=i===curIdx?'rgba(59,130,246,.12)':'';
       const col=i===curIdx?'var(--t)':v===0?'var(--m)':'var(--t)';
@@ -386,12 +387,12 @@ function renderB5(){
     html+=`<td style="color:var(--m)">${eur(Math.abs(sum/n))}</td></tr>`;
   });
   html+=`<tr class="tot-r"><td>Total gastos</td><td style="color:var(--m);text-align:right">${eur(Math.abs(presG()))}</td>`;
-  ALL_MESES.forEach((m,i)=>{
+  MESES.forEach((m,i)=>{
     const v=totGas[m];
     const bg=i===curIdx?'rgba(59,130,246,.12)':'';
     html+=`<td style="background:${bg};color:var(--r)">${eur(Math.abs(v))}</td>`;
   });
-  const avgG=ALL_MESES.reduce((s,m)=>s+totGas[m],0)/n;
+  const avgG=MESES.reduce((s,m)=>s+totGas[m],0)/n;
   html+=`<td style="color:var(--m)">${eur(Math.abs(avgG))}</td></tr>`;
 
   html+='</tbody>';
@@ -399,12 +400,12 @@ function renderB5(){
   /* footer balance */
   html+='<tfoot>';
   html+=`<tr class="bal-r"><td>Balance</td><td style="color:var(--m);text-align:right">${eursign(presI()+presG())}</td>`;
-  ALL_MESES.forEach((m,i)=>{
+  MESES.forEach((m,i)=>{
     const b=totIng[m]+totGas[m];
     const bg=i===curIdx?'rgba(59,130,246,.18)':'';
     html+=`<td style="background:${bg};color:${b>=0?'var(--g)':'var(--r)'}">${eursign(b)}</td>`;
   });
-  const avgB=(ALL_MESES.reduce((s,m)=>s+totIng[m],0)+ALL_MESES.reduce((s,m)=>s+totGas[m],0))/n;
+  const avgB=(MESES.reduce((s,m)=>s+totIng[m],0)+MESES.reduce((s,m)=>s+totGas[m],0))/n;
   html+=`<td style="color:${avgB>=0?'var(--g)':'var(--r)'}">${eursign(avgB)}</td></tr>`;
   html+='</tfoot>';
 

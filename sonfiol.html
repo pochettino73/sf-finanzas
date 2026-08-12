@@ -379,9 +379,8 @@ function renderB5(){
     html+=`<tr><td>${p}</td><td style="color:var(--m);text-align:right">${eur(Math.abs(pres))}</td>`;
     ALL_MESES.forEach((m,i)=>{
       const v=val(p,m); sum+=v; totGas[m]+=v;
-      const over=v!==0&&v<pres;
-      const bg=i===curIdx?'rgba(59,130,246,.12)':(v===0?'':over?'rgba(239,68,68,.08)':'rgba(34,197,94,.05)');
-      const col=i===curIdx?'var(--t)':v===0?'var(--m)':over?'var(--r)':'var(--t)';
+      const bg=i===curIdx?'rgba(59,130,246,.12)':'';
+      const col=i===curIdx?'var(--t)':v===0?'var(--m)':'var(--t)';
       html+=`<td style="background:${bg};color:${col}">${v===0?'&mdash;':eur(Math.abs(v))}</td>`;
     });
     html+=`<td style="color:var(--m)">${eur(Math.abs(sum/n))}</td></tr>`;
